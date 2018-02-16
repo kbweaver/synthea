@@ -78,9 +78,9 @@ public class Person implements Serializable {
   public Person(long seed) {
     this.seed = seed; // keep track of seed so it can be exported later
     random = new Random(seed);
-    attributes = new ConcurrentHashMap<String, Object>();
-    vitalSigns = new ConcurrentHashMap<VitalSign, Double>();
-    symptoms = new ConcurrentHashMap<String, Map<String, Integer>>();
+    attributes = new ConcurrentHashMap<>();
+    vitalSigns = new ConcurrentHashMap<>();
+    symptoms = new ConcurrentHashMap<>();
     events = new EventList();
     record = new HealthRecord();
   }
@@ -171,7 +171,7 @@ public class Person implements Serializable {
 
   public void setSymptom(String cause, String type, int value) {
     if (!symptoms.containsKey(type)) {
-      symptoms.put(type, new ConcurrentHashMap<String, Integer>());
+      symptoms.put(type, new ConcurrentHashMap<>());
     }
     symptoms.get(type).put(cause, value);
   }
@@ -180,10 +180,8 @@ public class Person implements Serializable {
     int max = 0;
     if (symptoms.containsKey(type)) {
       Map<String, Integer> typedSymptoms = symptoms.get(type);
-      for (String cause : typedSymptoms.keySet()) {
-        if (typedSymptoms.get(cause) > max) {
-          max = typedSymptoms.get(cause);
-        }
+      for (Integer weight : typedSymptoms.values()) {
+        max = Math.max(max, weight);
       }
     }
     return max;
@@ -342,7 +340,7 @@ public class Person implements Serializable {
   public void addCurrentProvider(String context, Provider provider) {
     Map<String, Provider> currentProviders = (Map) attributes.get(CURRENTPROVIDER);
     if (currentProviders == null) {
-      currentProviders = new HashMap<String, Provider>();
+      currentProviders = new HashMap<>();
       currentProviders.put(context, provider);
     }
     attributes.put(CURRENTPROVIDER, currentProviders);

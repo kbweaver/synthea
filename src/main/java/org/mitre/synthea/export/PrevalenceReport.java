@@ -58,8 +58,8 @@ public class PrevalenceReport {
         }
 
         getPop(connection, line);
-        completeSyntheaFields(connection, line);
-        completeDifferenceField(connection, line);
+        completeSyntheaFields(line);
+        completeDifferenceField(line);
       }
 
       allConditions(connection, data);
@@ -182,8 +182,7 @@ public class PrevalenceReport {
    * Calculates the prevalence rate and percent based on what is on that line of the report. Inserts
    * result of calculation into the prevalence rate and percent columns.
    */
-  private static void completeSyntheaFields(Connection connection,
-      LinkedHashMap<String, String> line) throws SQLException {
+  private static void completeSyntheaFields(LinkedHashMap<String, String> line) {
 
     if ((line.get(OCCUR).isEmpty()) || (line.get(POP).isEmpty())) {
       line.put(PREV_RATE, (null));
@@ -208,8 +207,7 @@ public class PrevalenceReport {
    * Calculates the difference between the Synthea prevalence percent and actual percent based on
    * what is on that line of the report. Inserts result of calculation into the difference column.
    */
-  private static void completeDifferenceField(Connection connection,
-      LinkedHashMap<String, String> line) throws SQLException {
+  private static void completeDifferenceField(LinkedHashMap<String, String> line) {
     if (line.get(ACTUAL_PREV_PERCENT).isEmpty()) {
       line.put(DIFFERENCE, (null));
     } else {
@@ -269,12 +267,12 @@ public class PrevalenceReport {
     while (rs.next()) {
       String disease = rs.getString("DistinctDisplay");
       int count = rs.getInt("CountDisplay");
-      LinkedHashMap<String, String> line = new LinkedHashMap<String, String>();
+      LinkedHashMap<String, String> line = new LinkedHashMap<>();
       line.put(ITEM, disease);
       line.put(OCCUR, Integer.toString(count));
       line.put(POP, Integer.toString(totalPopulation));
       data.add(line);
-      completeSyntheaFields(connection, line);
+      completeSyntheaFields(line);
     }
   }
 }

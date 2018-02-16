@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,10 +24,10 @@ public class Provider {
   public static final String PRESCRIPTIONS = "prescriptions";
 
   // ArrayList of all providers imported
-  private static ArrayList<Provider> providerList = new ArrayList<Provider>();
+  private static List<Provider> providerList = new ArrayList<>();
   // Hash of services to Providers that provide them
-  private static HashMap<String, ArrayList<Provider>> services = 
-      new HashMap<String, ArrayList<Provider>>();
+  private static Map<String, ArrayList<Provider>> services = 
+      new HashMap<>();
 
   public Map<String, Object> attributes;
   private Point coordinates;
@@ -38,7 +39,7 @@ public class Provider {
     // no-arg constructor provided for subclasses
     attributes = new LinkedTreeMap<>();
     utilization = HashBasedTable.create();
-    servicesProvided = new ArrayList<String>();
+    servicesProvided = new ArrayList<>();
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -61,7 +62,7 @@ public class Provider {
         ArrayList<Provider> l = services.get(s);
         l.add(this);
       } else {
-        ArrayList<Provider> l = new ArrayList<Provider>();
+        ArrayList<Provider> l = new ArrayList<>();
         l.add(this);
         services.put(s, l);
       }
@@ -144,7 +145,7 @@ public class Provider {
     }
   }
 
-  public static HashMap<String, ArrayList<Provider>> getServices() {
+  public static Map<String, ArrayList<Provider>> getServices() {
     return services;
   }
 }

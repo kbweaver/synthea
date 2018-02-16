@@ -41,7 +41,7 @@ public class Module {
   private static final Map<String, Module> modules = loadModules();
 
   private static Map<String, Module> loadModules() {
-    Map<String, Module> retVal = new ConcurrentHashMap<String, Module>();
+    Map<String, Module> retVal = new ConcurrentHashMap<>();
 
     retVal.put("Lifecycle", new LifecycleModule());
     retVal.put("Cardiovascular Disease", new CardiovascularDiseaseModule());
@@ -66,7 +66,7 @@ public class Module {
       e.printStackTrace();
     }
 
-    System.out.format("Loaded %d modules.\n", retVal.size());
+    System.out.format("Loaded %d modules.%n", retVal.size());
 
     return retVal;
   }
@@ -78,7 +78,7 @@ public class Module {
   }
 
   public static Module loadFile(Path path, Path modulesFolder) throws Exception {
-    System.out.format("Loading %s\n", path.toString());
+    System.out.format("Loading %s%n", path.toString());
     boolean submodule = !path.getParent().equals(modulesFolder);
     JsonObject object = null;
     FileReader fileReader = null;
@@ -100,7 +100,7 @@ public class Module {
    * @return a list of top-level modules. Submodules are not included.
    */
   public static List<Module> getModules() {
-    List<Module> list = new ArrayList<Module>();
+    List<Module> list = new ArrayList<>();
     modules.forEach((k, v) -> {
       if (!v.submodule) {
         list.add(v);
@@ -131,7 +131,7 @@ public class Module {
   public Module(JsonObject definition, boolean submodule) throws Exception {
     name = String.format("%s Module", definition.get("name").getAsString());
     this.submodule = submodule;
-    remarks = new ArrayList<String>();
+    remarks = new ArrayList<>();
     if (definition.has("remarks")) {
       JsonElement jsonRemarks = definition.get("remarks");
       for (JsonElement value : jsonRemarks.getAsJsonArray()) {
@@ -140,7 +140,7 @@ public class Module {
     }
 
     JsonObject jsonStates = definition.get("states").getAsJsonObject();
-    states = new ConcurrentHashMap<String, State>();
+    states = new ConcurrentHashMap<>();
     for (Entry<String, JsonElement> entry : jsonStates.entrySet()) {
       State state = State.build(this, entry.getKey(), entry.getValue().getAsJsonObject());
       states.put(entry.getKey(), state);

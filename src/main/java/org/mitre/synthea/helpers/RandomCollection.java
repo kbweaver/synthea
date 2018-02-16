@@ -9,7 +9,7 @@ import java.util.TreeMap;
  * gem. Adapted from https://stackoverflow.com/a/6409791/630384
  */
 public class RandomCollection<E> {
-  private final NavigableMap<Double, E> map = new TreeMap<Double, E>();
+  private final NavigableMap<Double, E> map = new TreeMap<>();
   private double total = 0;
 
   public void add(double weight, E result) {

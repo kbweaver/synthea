@@ -40,7 +40,6 @@ public class QualityOfLifeModule extends Module {
     int year = Utilities.getYear(time);
 
     if (!qalys.containsKey(year)) {
-      // double age = person.ageInYears(time) + 1;
       double[] values = calculate(person, time);
 
       dalys.put(year, values[0]);
@@ -129,7 +128,7 @@ public class QualityOfLifeModule extends Module {
   }
 
   public static List<Entry> conditionsInYear(List<Entry> conditions, long yearStart, long yearEnd) {
-    List<Entry> conditionsInYear = new ArrayList<Entry>();
+    List<Entry> conditionsInYear = new ArrayList<>();
     for (Entry condition : conditions) {
       if (disabilityWeights.containsKey(condition.codes.get(0).display)) {
         // condition.stop == 0 for conditions that have not yet ended
@@ -147,7 +146,6 @@ public class QualityOfLifeModule extends Module {
     // from http://www.who.int/quantifying_ehimpacts/publications/9241546204/en/
     // weight = age_weight * disability_weight
     double ageWeight = 0.1658 * age * Math.exp(-0.04 * age);
-    double weight = ageWeight * disabilityWeight;
-    return weight;
+    return ageWeight * disabilityWeight;
   }
 }

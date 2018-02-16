@@ -36,7 +36,7 @@ public final class LifecycleModule extends Module {
   public static final String QUIT_ALCOHOLISM_AGE = "quit alcoholism age";
   public static final String ADHERENCE_PROBABILITY = "adherence probability";
 
-  private static final boolean appendNumbersToNames =
+  private static final boolean APPEND_NUMBERS_TO_NAMES =
       Boolean.parseBoolean(Config.get("generate.append_numbers_to_person_names", "false"));
   
   private static RandomCollection<String> sexualOrientationData = loadSexualOrientationData();
@@ -74,7 +74,7 @@ public final class LifecycleModule extends Module {
   }
   
   private static RandomCollection<String> loadSexualOrientationData() {
-    RandomCollection<String> soDistribution = new RandomCollection<String>();
+    RandomCollection<String> soDistribution = new RandomCollection<>();
     double[] soPercentages = BiometricsConfig.doubles("lifecycle.sexual_orientation"); 
     // [heterosexual, homosexual, bisexual]
     soDistribution.add(soPercentages[0], "heterosexual");
@@ -122,7 +122,7 @@ public final class LifecycleModule extends Module {
     String language = (String) attributes.get(Person.FIRST_LANGUAGE);
     String firstName = fakeFirstName(gender, language, person.random);
     String lastName = fakeLastName(language, person.random);
-    if (appendNumbersToNames) {
+    if (APPEND_NUMBERS_TO_NAMES) {
       firstName = addHash(firstName);
       lastName = addHash(lastName);
     }
@@ -132,14 +132,14 @@ public final class LifecycleModule extends Module {
 
     String motherFirstName = fakeFirstName("F", language, person.random);
     String motherLastName = fakeLastName(language, person.random);
-    if (appendNumbersToNames) {
+    if (APPEND_NUMBERS_TO_NAMES) {
       motherFirstName = addHash(motherFirstName);
       motherLastName = addHash(motherLastName);
     }
     attributes.put(Person.NAME_MOTHER, motherFirstName + " " + motherLastName);
     
     String fatherFirstName = fakeFirstName("M", language, person.random);
-    if (appendNumbersToNames) {
+    if (APPEND_NUMBERS_TO_NAMES) {
       fatherFirstName = addHash(fatherFirstName);
     }
     // this is anglocentric where the baby gets the father's last name
@@ -147,16 +147,16 @@ public final class LifecycleModule extends Module {
 
     double prevalenceOfTwins = 
         (double) BiometricsConfig.get("lifecycle.prevalence_of_twins", 0.02);
-    if ((person.rand() < prevalenceOfTwins)) {
+    if (person.rand() < prevalenceOfTwins) {
       attributes.put(Person.MULTIPLE_BIRTH_STATUS, person.randInt(3) + 1);
     }
 
-    String phoneNumber = "555-" + ((person.randInt(999 - 100 + 1) + 100)) + "-"
-        + ((person.randInt(9999 - 1000 + 1) + 1000));
+    String phoneNumber = "555-" + (person.randInt(999 - 100 + 1) + 100) + "-"
+        + (person.randInt(9999 - 1000 + 1) + 1000);
     attributes.put(Person.TELECOM, phoneNumber);
 
-    String ssn = "999-" + ((person.randInt(99 - 10 + 1) + 10)) + "-"
-        + ((person.randInt(9999 - 1000 + 1) + 1000));
+    String ssn = "999-" + (person.randInt(99 - 10 + 1) + 10) + "-"
+        + (person.randInt(9999 - 1000 + 1) + 1000);
     attributes.put(Person.IDENTIFIER_SSN, ssn);
 
     String city = (String) attributes.get(Person.CITY);
@@ -272,7 +272,7 @@ public final class LifecycleModule extends Module {
       case 16:
         // driver's license
         if (person.attributes.get(Person.IDENTIFIER_DRIVERS) == null) {
-          String identifierDrivers = "S999" + ((person.randInt(99999 - 10000 + 1) + 10000));
+          String identifierDrivers = "S999" + (person.randInt(99999 - 10000 + 1) + 10000);
           person.attributes.put(Person.IDENTIFIER_DRIVERS, identifierDrivers);
         }
         break;
@@ -310,7 +310,7 @@ public final class LifecycleModule extends Module {
               String firstName = ((String) person.attributes.get(Person.FIRST_NAME));
               String language = (String) person.attributes.get(Person.FIRST_LANGUAGE);
               String newLastName = fakeLastName(language, person.random);
-              if (appendNumbersToNames) {
+              if (APPEND_NUMBERS_TO_NAMES) {
                 newLastName = addHash(newLastName);
               }
               person.attributes.put(Person.LAST_NAME, newLastName);
@@ -713,6 +713,8 @@ public final class LifecycleModule extends Module {
     }
   }
 
+  private static final double ONE_YEAR_IN_MS = TimeUnit.DAYS.toMillis(365);
+  
   private static double likelihoodOfDeath(int age) {
     double yearlyRisk;
 
@@ -742,10 +744,7 @@ public final class LifecycleModule extends Module {
       yearlyRisk = 50_000.0 / 100_000.0;
     }
 
-    double oneYearInMs = TimeUnit.DAYS.toMillis(365);
-    double adjustedRisk = Utilities.convertRiskToTimestep(yearlyRisk, oneYearInMs);
-
-    return adjustedRisk;
+    return Utilities.convertRiskToTimestep(yearlyRisk, ONE_YEAR_IN_MS);
   }
 
   private static void startSmoking(Person person, long time) {

@@ -167,11 +167,11 @@ public class Location {
   public String randomCityName(Random random) {
     long targetPop = (long) (random.nextDouble() * totalPopulation);
 
-    for (Map.Entry<String, Long> city : populationByCity.entrySet()) {
-      targetPop -= city.getValue();
+    for (Map.Entry<String, Long> currCity : populationByCity.entrySet()) {
+      targetPop -= currCity.getValue();
 
       if (targetPop < 0) {
-        return city.getKey();
+        return currCity.getKey();
       }
     }
 

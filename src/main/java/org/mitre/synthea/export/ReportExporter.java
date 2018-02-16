@@ -75,11 +75,11 @@ public class ReportExporter {
     int firstYear = 0;
 
     // initial capacity is 80 - think 50 past 30 future?
-    List<Double> minimums = new ArrayList<Double>(80);
-    List<Double> maximums = new ArrayList<Double>(80);
-    List<Double> averages = new ArrayList<Double>(80);
-    List<Double> stddevs = new ArrayList<Double>(80);
-    List<Integer> counts = new ArrayList<Integer>(80);
+    List<Double> minimums = new ArrayList<>(80);
+    List<Double> maximums = new ArrayList<>(80);
+    List<Double> averages = new ArrayList<>(80);
+    List<Double> stddevs = new ArrayList<>(80);
+    List<Integer> counts = new ArrayList<>(80);
 
     while (rs.next()) {
       int year = rs.getInt(1);
