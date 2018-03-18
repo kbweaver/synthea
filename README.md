@@ -32,11 +32,25 @@ cd synthea
 ./gradlew build check test
 ```
 
+Alternatively, run Synthea using [Docker](https://www.docker.com/):
+```
+git clone https://github.com/synthetichealth/synthea.git
+cd synthea
+docker build -t synthea .
+```
+
 ### Generate Synthetic Patients
 Generating the population one at a time...
 ```
 ./run_synthea
 ```
+
+Or, if using Docker:
+```
+docker run -v `pwd`/output:/synthea/output synthea
+```
+
+For the sake of brevity, either of the two commands above will be referred to as `run_synthea` below.
 
 Command-line arguments may be provided to specify a state, city, population size, or seed for randomization.
 
